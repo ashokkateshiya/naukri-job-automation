@@ -1,31 +1,83 @@
 # 🚀 Naukri Profile Freshener & Job Automator
 
-An automated Python and Playwright tool designed to keep your Naukri profile active for recruiters and apply to matching mobile engineering positions (Android, iOS, Flutter, Cross-Platform) automatically.
+[![Python 3.10+](https://img.shields.io/badge/Python-3.10%2B-blue.svg?logo=python&logoColor=white)](https://www.python.org/)
+[![Playwright](https://img.shields.io/badge/Playwright-Chromium-green.svg?logo=playwright&logoColor=white)](https://playwright.dev/)
+[![Platform Windows](https://img.shields.io/badge/Platform-Windows-0078D6.svg?logo=windows&logoColor=white)](https://www.microsoft.com/)
+[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
+
+An intelligent, full-lifecycle automation suite designed to keep your Naukri profile ranking at the top of recruiter search results and automatically submit direct applications for senior mobile engineering roles (Android, iOS, Flutter, Cross-Platform).
 
 ---
 
-## 🌟 Key Features
+## 📌 Executive Summary
 
-1. **Daily Profile Freshener ("Last Active" Booster)**:
-   - Naukri recruiter search algorithms heavily prioritize candidates whose profiles show as **"Updated Today"**.
-   - The script slightly toggles your resume headline (e.g., adding/removing a trailing period), refreshing your "Last Active" timestamp without altering your content.
-   - Increases inbound recruiter visibility and search appearances by 3–5x.
+In the competitive Indian tech hiring market, securing recruiter interviews on Naukri hinges on two factors:
+1. **Recruiter Search Ranking**: Naukri heavily indexes candidates with an **"Updated Today / Active Today"** status. Profiles untouched for more than a few days drop off the first few search pages.
+2. **Speed & Volume**: Top senior openings receive hundreds of applicants within 24–48 hours. Applying consistently without manual fatigue is critical.
 
-2. **Smart Job Search & Auto-Apply**:
-   - Searches flexible keywords across Android, iOS, Flutter, Mobile Lead, Architect, and Engineer roles.
-   - Configurable experience filtering (e.g., 8–20 years).
-   - Targeted locations: Bengaluru, Hyderabad, Pune, and Remote.
-   - Multi-page scanning (Pages 1–5) to discover hundreds of live openings.
-   - **Strict Apply Button Detection**: Distinguishes between direct portal "Apply" and "Save Job" buttons to ensure applications are actually submitted rather than just bookmarked.
-   - Automatically handles post-click confirmation modals (e.g., *"Apply without updating resume"*).
-   - Skips external portal redirects ("Apply on company site") to prioritize direct 1-click applications.
+This tool runs daily to refresh your profile timestamp (increasing recruiter profile views by **3–5x**), scans multi-page job listings across major tech hubs, and automatically submits up to **50 direct applications** daily while filtering out bookmarks, third-party redirects, and duplicate postings.
 
-3. **Persistent Authenticated Session**:
-   - Uses Playwright's persistent browser context (`user_data/`).
-   - You only need to log in and verify OTP once; your authenticated session is preserved across runs.
+---
 
-4. **Duplicate Prevention**:
-   - Stores submitted application links in `applied_jobs.json` to ensure you never re-apply to the same opening across daily runs.
+## 💡 The 3 Core Problems It Solves
+
+| Challenge | Why It Happens | How This Suite Solves It |
+| :--- | :--- | :--- |
+| **Recruiter Visibility Drop** | Naukri’s algorithm favors candidates active today. Inactive profiles sink to lower pages. | Automatically toggles a trailing period on your resume headline daily, updating your profile timestamp to **"Updated Today"** without altering your real content. |
+| **Application Burnout** | Manually searching and applying to 50+ roles takes 1–2 hours of repetitive clicking daily. | Automates multi-page scanning, keyword filtering, and form submission in just a few minutes. |
+| **Scraper Pitfalls (Save vs. Apply)** | Naukri places the **"Save" (Bookmark)** button beside the **"Apply"** button in the same container. Naive scrapers often click "Save" instead. | Employs strict DOM text matching to guarantee genuine application submissions, while filtering out third-party ATS redirects (Workday, Taleo, etc.). |
+
+---
+
+## 🏗️ Architecture & Workflow
+
+```mermaid
+flowchart TD
+    A["1. Launch Persistent Browser Context"] --> B{"Is Session Authenticated?"}
+    B -- No --> C["Interactive Login / OTP Prompt"]
+    C --> D["Save Session to user_data/"]
+    B -- Yes --> E["2. Refresh Profile Headline"]
+    D --> E
+    E --> F["Toggle Headline Period -> 'Updated Today'"]
+    F --> G["3. Multi-Query Job Search"]
+    G --> H["Scan Pages for Android, iOS, Flutter (8-20 Yrs)"]
+    H --> I{"Direct Apply or External Site?"}
+    I -- External Site --> J["Skip / Log External Redirect"]
+    I -- Direct Apply --> K["Click Genuine 'Apply' Button"]
+    K --> L["Handle Modals ('Apply without updating')"]
+    L --> M["Record in applied_jobs.json (Prevents Duplicates)"]
+    M --> N{"Reached 50 Applications Target?"}
+    N -- No --> H
+    N -- Yes --> O["4. Log Summary & Close Browser"]
+```
+
+---
+
+## ⚙️ How It Works (Step-by-Step)
+
+### 1. Persistent Session & Anti-Bot Protection
+- Uses Playwright Chromium with a persistent user directory (`user_data/`).
+- You log in with your credentials and OTP once; all session cookies and tokens are preserved across runs.
+- Configured with desktop user-agent headers and non-headless browser flags to bypass Cloudflare/PerimeterX bot detection.
+
+### 2. The Headline Freshener ("Recruiter Algorithm Booster")
+- Navigates to `https://www.naukri.com/mnjuser/profile`.
+- Locates the Resume Headline section and edits it by toggling a trailing period (`.` $\leftrightarrow$ empty).
+- Clicking Save signals Naukri’s indexing engine that your profile was actively modified today, placing you in the highest-priority search bracket for recruiters.
+
+### 3. Flexible Multi-Role Job Discovery
+- Reads customizable filters from `config.json`:
+  - **Keywords**: `Android`, `iOS`, `Flutter`, `Mobile Developer`, `Mobile Lead`, `Mobile Architect`, `React Native Mobile`.
+  - **Experience**: Flexible `8` to `20` years window.
+  - **Locations**: Bengaluru, Hyderabad, Pune, and Remote.
+- Traverses multi-page search results (`Page 1`, `Page 2`, `Page 3`...) using gradual scrolling to trigger React client-side hydration and lazy-loaded job cards.
+
+### 4. Smart Application Engine
+- Evaluates each job:
+  - **Duplicate Check**: Verifies the job URL against `applied_jobs.json`.
+  - **Strict Button Detection**: Distinguishes genuine platform apply buttons from bookmark buttons and third-party company site redirects.
+  - **Modal Handling**: Automatically navigates through confirmation modals such as *"Apply without updating resume"*.
+  - **State Persistence**: Records applied jobs to prevent redundant applications in future runs.
 
 ---
 
@@ -40,23 +92,20 @@ naukri-job-automation/
 ├── config.example.json      # Template configuration file
 ├── requirements.txt         # Python dependencies
 ├── .gitignore               # Excludes sensitive sessions and logs
-└── README.md                # Documentation and setup guide
+└── README.md                # Comprehensive documentation
 ```
 
 ---
 
 ## 🛠️ Prerequisites & Installation
 
-1. **Python 3.10+**:
-   Ensure Python is installed and added to your system `PATH`.
-
-2. **Clone the Repository**:
+1. **Clone the Repository**:
    ```bash
-   git clone https://github.com/<YOUR_USERNAME>/naukri-job-automation.git
+   git clone https://github.com/ashokkateshiya/naukri-job-automation.git
    cd naukri-job-automation
    ```
 
-3. **Install Dependencies**:
+2. **Install Python Dependencies**:
    ```bash
    pip install -r requirements.txt
    playwright install chromium
@@ -66,7 +115,7 @@ naukri-job-automation/
 
 ## ⚙️ Configuration (`config.json`)
 
-Customize your search filters and application limits in `config.json`:
+Customize your search filters and application limits:
 
 ```json
 {
@@ -100,15 +149,13 @@ Customize your search filters and application limits in `config.json`:
 }
 ```
 
-> **Note on `headless`**: Naukri employs anti-bot protection (Cloudflare/PerimeterX). Running with `"headless": false` is recommended to ensure proper rendering and avoid anti-bot blocks.
-
 ---
 
 ## 🚀 Usage
 
-### 1. Daily Routine (Profile Refresh + Job Apply)
+### Daily Routine (Profile Refresh + Auto-Apply)
 
-Run the PowerShell script:
+Run via PowerShell:
 ```powershell
 powershell -ExecutionPolicy Bypass -File ./run_daily.ps1
 ```
@@ -117,10 +164,10 @@ Or directly with Python:
 python naukri_automator.py --daily
 ```
 
-- If you are not logged in, a Chrome window will open prompting you for your credentials/OTP. Once you log in, press **`Enter`** in the terminal or let the script auto-detect the redirect to proceed.
-- Once authenticated, it refreshes your resume headline and submits applications up to your `max_applications_per_run` target (e.g. 50).
+- **First Run**: If unauthenticated, a Chrome window will open. Enter your credentials and OTP once.
+- **Subsequent Runs**: Automatically executes fully unattended, updating your profile timestamp and applying for jobs up to your daily target.
 
-### 2. Standalone Profile Refresh Only
+### Profile Refresh Only
 
 To refresh your profile without applying for jobs:
 ```bash
@@ -131,11 +178,11 @@ python naukri_automator.py --refresh
 
 ## 🔒 Security & Privacy
 
-- **Session Data**: The `.gitignore` file strictly excludes `user_data/` and `storage_state.json`. Your credentials, cookies, and tokens are stored locally and will **never** be committed to GitHub.
-- **Application History**: `last_run.log` and `applied_jobs.json` are also ignored to protect your application history.
+- **Session Isolation**: `.gitignore` strictly excludes `user_data/` and `storage_state.json`. Your credentials, session cookies, and authentication tokens are never pushed to GitHub.
+- **Application History**: `last_run.log` and `applied_jobs.json` are excluded to keep your job search history private.
 
 ---
 
 ## 📜 License
 
-This project is for personal use and educational automation purposes. Ensure compliance with Naukri's Terms of Service when using automated tools.
+Distributed under the MIT License. See `LICENSE` for more information.
