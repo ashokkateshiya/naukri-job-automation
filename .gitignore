@@ -1,0 +1,25 @@
+# Naukri Session & Auth Data (CRITICAL: Do not commit sensitive tokens/cookies)
+user_data/
+storage_state.json
+*.pkl
+
+# Local run logs & history
+last_run.log
+applied_jobs.json
+
+# Python & Environment
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+.env
+.venv/
+env/
+venv/
+ENV/
+
+# OS / Editor files
+.DS_Store
+Thumbs.db
+.vscode/
+.idea/

@@ -1,0 +1,29 @@
+{
+  "keywords": [
+    "Android",
+    "iOS",
+    "Flutter",
+    "Mobile Developer",
+    "Mobile Engineer",
+    "Android Developer",
+    "iOS Developer",
+    "Flutter Developer",
+    "Mobile Lead",
+    "Mobile Architect",
+    "React Native Mobile"
+  ],
+  "locations": [
+    "Bengaluru",
+    "Hyderabad",
+    "Pune",
+    "Remote"
+  ],
+  "experience_min_years": 8,
+  "experience_max_years": 20,
+  "refresh_profile_daily": true,
+  "auto_apply_easy_apply": true,
+  "max_applications_per_run": 50,
+  "max_pages_per_keyword": 5,
+  "browser_user_data_dir": "user_data",
+  "headless": false
+}
