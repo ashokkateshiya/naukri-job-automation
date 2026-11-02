@@ -79,7 +79,26 @@ def run_login():
         browser_context.close()
 
 import urllib.parse
-import msvcrt
+import sys
+import select
+
+# Cross-platform non-blocking keypress detection
+def _kbhit():
+    """Returns True if a key has been pressed in the terminal (cross-platform)."""
+    if sys.platform == "win32":
+        import msvcrt
+        return msvcrt.kbhit()
+    else:
+        # macOS / Linux: use select on stdin
+        return select.select([sys.stdin], [], [], 0)[0] != []
+
+def _getch():
+    """Reads a single keypress without blocking (cross-platform)."""
+    if sys.platform == "win32":
+        import msvcrt
+        return msvcrt.getch()
+    else:
+        return sys.stdin.read(1)
 
 def is_session_active(page):
     """Checks if the user has an active authenticated session on Naukri."""
@@ -131,10 +150,10 @@ def ensure_logged_in(page):
     for _ in range(150):
         time.sleep(2)
 
-        # Signal 1: User pressed Enter or any key in PowerShell
+        # Signal 1: User pressed Enter or any key in terminal (Windows & macOS/Linux)
         try:
-            if msvcrt.kbhit():
-                msvcrt.getch()
+            if _kbhit():
+                _getch()
                 log("Keypress detected in terminal! Verifying session...")
                 page.goto("https://www.naukri.com/mnjuser/profile", wait_until="domcontentloaded", timeout=15000)
                 time.sleep(2)

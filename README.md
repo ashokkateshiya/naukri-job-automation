@@ -3,6 +3,8 @@
 [![Python 3.10+](https://img.shields.io/badge/Python-3.10%2B-blue.svg?logo=python&logoColor=white)](https://www.python.org/)
 [![Playwright](https://img.shields.io/badge/Playwright-Chromium-green.svg?logo=playwright&logoColor=white)](https://playwright.dev/)
 [![Platform Windows](https://img.shields.io/badge/Platform-Windows-0078D6.svg?logo=windows&logoColor=white)](https://www.microsoft.com/)
+[![Platform macOS](https://img.shields.io/badge/Platform-macOS-000000.svg?logo=apple&logoColor=white)](https://www.apple.com/macos/)
+[![Platform Linux](https://img.shields.io/badge/Platform-Linux-FCC624.svg?logo=linux&logoColor=black)](https://www.linux.org/)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 
 An intelligent, full-lifecycle automation suite designed to keep your Naukri profile ranking at the top of recruiter search results and automatically submit direct applications for senior mobile engineering roles (Android, iOS, Flutter, Cross-Platform).
@@ -155,11 +157,18 @@ Customize your search filters and application limits:
 
 ### Daily Routine (Profile Refresh + Auto-Apply)
 
-Run via PowerShell:
+**Windows (PowerShell):**
 ```powershell
 powershell -ExecutionPolicy Bypass -File ./run_daily.ps1
 ```
-Or directly with Python:
+
+**macOS / Linux (Terminal):**
+```bash
+chmod +x run_daily.sh
+./run_daily.sh
+```
+
+**Or directly with Python (any platform):**
 ```bash
 python naukri_automator.py --daily
 ```
