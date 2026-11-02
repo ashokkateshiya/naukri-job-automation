@@ -101,17 +101,168 @@ naukri-job-automation/
 
 ## 🛠️ Prerequisites & Installation
 
-1. **Clone the Repository**:
-   ```bash
-   git clone https://github.com/ashokkateshiya/naukri-job-automation.git
-   cd naukri-job-automation
+### Step 1: Install Python 3.10+
+
+<details>
+<summary><b>🪟 Windows</b></summary>
+
+**Option A — Microsoft Store (Easiest):**
+1. Open **Microsoft Store**, search for **Python 3.12**, click **Install**.
+
+**Option B — Official Installer:**
+1. Go to [python.org/downloads](https://www.python.org/downloads/windows/)
+2. Download the latest **Python 3.12.x Windows installer (64-bit)**.
+3. Run the installer — **tick "Add Python to PATH"** before clicking Install.
+4. Verify:
+   ```powershell
+   python --version
+   pip --version
    ```
 
-2. **Install Python Dependencies**:
+**Option C — winget (PowerShell):**
+```powershell
+winget install --id Python.Python.3.12 -e --source winget
+```
+
+</details>
+
+<details>
+<summary><b>🍎 macOS</b></summary>
+
+**Option A — Homebrew (Recommended):**
+1. Install Homebrew (if not already installed):
    ```bash
-   pip install -r requirements.txt
-   playwright install chromium
+   /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"
    ```
+2. Install Python:
+   ```bash
+   brew install python@3.12
+   ```
+3. Verify:
+   ```bash
+   python3 --version
+   pip3 --version
+   ```
+
+**Option B — Official Installer:**
+1. Go to [python.org/downloads](https://www.python.org/downloads/macos/)
+2. Download the latest **macOS installer (.pkg)**.
+3. Run the `.pkg` file and follow the setup wizard.
+4. Verify in Terminal:
+   ```bash
+   python3 --version
+   ```
+
+</details>
+
+---
+
+### Step 2: Clone the Repository
+
+```bash
+git clone https://github.com/ashokkateshiya/naukri-job-automation.git
+cd naukri-job-automation
+```
+
+> **Don't have Git?**
+> - **Windows**: `winget install --id Git.Git -e --source winget` then restart terminal.
+> - **macOS**: Run `git` in Terminal — macOS will prompt you to install Xcode Command Line Tools automatically.
+
+---
+
+### Step 3: Install Python Dependencies
+
+<details>
+<summary><b>🪟 Windows (PowerShell)</b></summary>
+
+```powershell
+pip install -r requirements.txt
+```
+
+</details>
+
+<details>
+<summary><b>🍎 macOS / Linux (Terminal)</b></summary>
+
+```bash
+pip3 install -r requirements.txt
+```
+
+> **Tip**: If you get a permissions error, use a virtual environment:
+> ```bash
+> python3 -m venv venv
+> source venv/bin/activate
+> pip install -r requirements.txt
+> ```
+
+</details>
+
+---
+
+### Step 4: Install Playwright & Chromium Browser
+
+Playwright manages its own browser binaries — no manual Chrome download needed.
+
+<details>
+<summary><b>🪟 Windows (PowerShell)</b></summary>
+
+```powershell
+playwright install chromium
+```
+
+</details>
+
+<details>
+<summary><b>🍎 macOS / Linux (Terminal)</b></summary>
+
+```bash
+playwright install chromium
+```
+
+> **macOS only**: If you see a security warning when Playwright tries to open Chromium, go to  
+> **System Settings → Privacy & Security → Allow Anyway**.
+
+</details>
+
+---
+
+### Step 5: Copy & Customize Configuration
+
+```bash
+cp config.example.json config.json
+```
+
+Then edit `config.json` to adjust your keywords, locations, experience range, and daily application target. See the [Configuration](#️-configuration-configjson) section below.
+
+---
+
+### ✅ Verify Everything Is Ready
+
+Run this to confirm all tools are installed and working:
+
+<details>
+<summary><b>🪟 Windows</b></summary>
+
+```powershell
+python --version
+pip show playwright
+playwright --version
+```
+
+</details>
+
+<details>
+<summary><b>🍎 macOS / Linux</b></summary>
+
+```bash
+python3 --version
+pip3 show playwright
+playwright --version
+```
+
+</details>
+
+All three commands should return version numbers without errors. You are ready to run the automation!
 
 ---
 
