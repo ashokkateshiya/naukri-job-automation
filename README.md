@@ -315,6 +315,7 @@ powershell -ExecutionPolicy Bypass -File ./run_daily.ps1
 
 **macOS / Linux (Terminal):**
 ```bash
+python3 naukri_automator.py --login
 chmod +x run_daily.sh
 ./run_daily.sh
 ```
